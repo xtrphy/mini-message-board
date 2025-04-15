@@ -1,51 +1,20 @@
 const { Router } = require('express');
+const { getAllMessages, insertMessage } = require('../db/queries');
 
 const indexRouter = Router();
 
-const date = new Date();
-
-const messages = [
-    {
-        text: 'Hi there!',
-        user: 'Amando',
-        added: {
-            day: date.getDate(),
-            month: date.getMonth() + 1,
-            year: date.getFullYear()
-        }
-    },
-    {
-        text: 'Hello World!',
-        user: 'Charles',
-        added: {
-            day: date.getDate(),
-            month: date.getMonth() + 1,
-            year: date.getFullYear()
-        }
-    }
-];
-
-indexRouter.get('/', (req, res) => {
-    res.render('index', { messages: messages });
+indexRouter.get('/', async (req, res) => {
+    const messages = await getAllMessages();
+    res.render('index', { messages });
 });
 
 indexRouter.get('/new', (req, res) => {
     res.render('form');
 });
 
-indexRouter.post('/new', (req, res) => {
-    const { message, author } = req.body;
-
-    messages.push({
-        text: message,
-        user: author,
-        added: {
-            day: date.getDate(),
-            month: date.getMonth() + 1,
-            year: date.getFullYear()
-        }
-    });
-
+indexRouter.post('/new', async (req, res) => {
+    const { messageText, messageUser } = req.body;
+    await insertMessage(messageText, messageUser);
     res.redirect('/');
 });
 

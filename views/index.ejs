@@ -12,12 +12,12 @@
         <% messages.forEach((message)=> { %>
             <div class="message">
                 <p><strong>
-                        <%= message.user %>:
+                        <%= message.username %>:
                     </strong>
                     <%= message.text %>
                 </p>
-                <p><small>
-                        <%= message.added.day %>.<%= message.added.month %>.<%= message.added.year %>
+                <p class="date"><small>
+                        (<%= new Date(message.added).toLocaleString() %>)
                     </small></p>
             </div>
             <% }) %>
